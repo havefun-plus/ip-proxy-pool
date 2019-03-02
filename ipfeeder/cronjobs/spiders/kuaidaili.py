@@ -6,16 +6,14 @@ from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP
 
 
-class XiciProxy(SpiderJob):
-    rule = '1h'
+class KuaiProxy(SpiderJob):
+    rule = '30m'
     right_now = True
     cancelled = False
 
     urls = [
-        'https://www.xicidaili.com/wn/',
-        'https://www.xicidaili.com/nn/',
-        'https://www.xicidaili.com/nt/',
-        'https://www.xicidaili.com/wt/',
+        'https://www.kuaidaili.com/free/inha/',
+        'https://www.kuaidaili.com/free/intr/'
     ]
 
     def run(self):
@@ -24,14 +22,16 @@ class XiciProxy(SpiderJob):
             if not response.ok:
                 continue
             html = etree.HTML(response.content)
-            trs = html.xpath('//table[@id="ip_list"]//tr/td')
+            trs = html.xpath('.//table//tr')
             for tr in trs:
-                tds = tr.xpath('..//text()')
-                ip = tds[2]
-                port = tds[4]
-                protocol = tds[12]
+                tds = tr.xpath('./td/text()')
+                if len(tds) < 4:
+                    continue
+                ip = tds[0]
+                port = tds[1]
+                protocol = tds[3]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(f'xici proxy got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(f'kuai daili got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
             gevent.sleep(10)

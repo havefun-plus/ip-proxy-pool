@@ -2,7 +2,7 @@ isort:
 	isort -rc .    
 
 lint:
-	flake8 --format=pylint --count --exit-zero cronjob tests examples
+	flake8 --format=pylint --count --exit-zero ipfeeder tests
 
 clean:
 	find . -iname "*__pycache__" | xargs rm -rf

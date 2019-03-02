@@ -81,7 +81,7 @@ class HttpValidator(BaseJob):
 
 class HttpsValidator(BaseJob):
     rule = '20m'
-    right_now = False 
+    right_now = False
 
     @property
     def get_value_func(self):

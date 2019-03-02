@@ -1,7 +1,7 @@
 FROM python:3.6
 MAINTAINER fcy "cangyufu@gmail.com"
 
-ENV REFRESHED_AT 2019-03-02-01
+ENV REFRESHED_AT 2019-03-03-01
 
 WORKDIR /usr/src/app
 COPY requirements.txt ./

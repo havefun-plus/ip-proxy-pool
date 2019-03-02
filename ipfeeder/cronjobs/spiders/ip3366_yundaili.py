@@ -1,3 +1,5 @@
+from random import randint
+
 import gevent
 from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
@@ -6,16 +8,13 @@ from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP
 
 
-class XiciProxy(SpiderJob):
+class IP3366_YunProxy(SpiderJob):
     rule = '1h'
     right_now = True
     cancelled = False
 
     urls = [
-        'https://www.xicidaili.com/wn/',
-        'https://www.xicidaili.com/nn/',
-        'https://www.xicidaili.com/nt/',
-        'https://www.xicidaili.com/wt/',
+        f'http://www.ip3366.net/free/?stype=1&page={i}' for i in range(1, 8)
     ]
 
     def run(self):
@@ -24,14 +23,17 @@ class XiciProxy(SpiderJob):
             if not response.ok:
                 continue
             html = etree.HTML(response.content)
-            trs = html.xpath('//table[@id="ip_list"]//tr/td')
+            trs = html.xpath('.//div[@id="list"]//tr')
             for tr in trs:
-                tds = tr.xpath('..//text()')
-                ip = tds[2]
-                port = tds[4]
-                protocol = tds[12]
+                tds = tr.xpath('./td/text()')
+                if len(tds) < 4:
+                    continue
+                ip = tds[0]
+                port = tds[1]
+                protocol = tds[3]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(f'xici proxy got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(
+                        f'ip3366 proxy got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
-            gevent.sleep(10)
+            gevent.sleep(randint(11, 23))
