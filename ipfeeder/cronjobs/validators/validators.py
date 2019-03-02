@@ -46,7 +46,7 @@ def validate(url) -> bool:
 
 
 def _run(validator):
-    for ip in validator.get_value_func()():
+    for ip in validator.get_value_func():
         if not ip:
             continue
         if validate(ip):
@@ -58,8 +58,9 @@ class RawValidator(BaseJob):
     rule = '5m'
     right_now = True
 
+    @property
     def get_value_func(self):
-        return getattr(db, 'raw_iter')
+        return getattr(db, 'raw_pop_iter')
 
     def run(self):
         gevent.sleep(30)
@@ -71,17 +72,19 @@ class HttpValidator(BaseJob):
     rule = '20m'
     right_now = False
 
+    @property
     def get_value_func(self):
-        return getattr(db, 'http_iter')
+        return getattr(db, 'http_pop_iter')
 
     run = _run
 
 
 class HttpsValidator(BaseJob):
     rule = '20m'
-    right_now = False
+    right_now = False 
 
+    @property
     def get_value_func(self):
-        return getattr(db, 'https_iter')
+        return getattr(db, 'https_pop_iter')
 
     run = _run
