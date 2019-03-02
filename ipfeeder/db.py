@@ -14,8 +14,10 @@ class DB:
     def from_settings(cls):
         return cls(**settings.REDIS_SETTINGS)
 
-    def _push_set(self, list_name, *value):
-        self.conn.sadd(list_name, *value)
+    def _push_set(self, list_name, *values):
+        lvalues = list(filter(lambda x: x is not None, values))
+        if lvalues:
+            self.conn.sadd(list_name, *lvalues)
 
     def add_raw(self, *values):
         self._push_set(RAW_IPS, *values)
@@ -36,9 +38,10 @@ class DB:
                 pass
 
     def _iter(self, ip_type):
-        for ip in self.conn.sscan_iter(ip_type):
-            yield ip.decode()
-            self.conn.srem(ip_type, ip)
+        for raw_ip in self.conn.sscan_iter(ip_type):
+            self.conn.srem(ip_type, raw_ip)
+            ip = raw_ip and raw_ip.decode()
+            yield ip
 
     def raw_iter(self):
         yield from self._iter(RAW_IPS)
