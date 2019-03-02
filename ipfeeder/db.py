@@ -38,10 +38,10 @@ class DB:
                 pass
 
     def _iter(self, ip_type):
-        for raw_ip in self.conn.sscan_iter(ip_type):
-            self.conn.srem(ip_type, raw_ip)
-            ip = raw_ip and raw_ip.decode()
-            yield ip
+        bip = self.conn.spop(ip_type)
+        while bip:
+            yield bip and bip.decode()
+            bip = self.conn.spop(ip_type)
 
     def raw_iter(self):
         yield from self._iter(RAW_IPS)
@@ -57,7 +57,7 @@ class DB:
         return list(map(lambda x: x.decode(), result))
 
     def _get_all_https(self):
-        result =  self.conn.smembers(VALIDATED_HTTPS)
+        result = self.conn.smembers(VALIDATED_HTTPS)
         return list(map(lambda x: x.decode(), result))
 
     def to_dict(self):
