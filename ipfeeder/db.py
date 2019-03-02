@@ -37,19 +37,25 @@ class DB:
             else:
                 pass
 
-    def _iter(self, ip_type):
+    def _pop_iter(self, ip_type):
         bip = self.conn.spop(ip_type)
         while bip:
             yield bip and bip.decode()
             bip = self.conn.spop(ip_type)
 
-    def raw_iter(self):
-        yield from self._iter(RAW_IPS)
+    def _iter(self, ip_type):
+        for bip in self.conn.sscan_iter(ip_type):
+            self.conn.srem(ip_type, bip)
+            ip = bip and bip.decode()
+            yield ip
 
-    def http_iter(self):
+    def raw_pop_iter(self):
+        yield from self._pop_iter(RAW_IPS)
+
+    def http_pop_iter(self):
         yield from self._iter(VALIDATED_HTTP)
 
-    def https_iter(self):
+    def https_pop_iter(self):
         yield from self._iter(VALIDATED_HTTPS)
 
     def _get_all_http(self):
