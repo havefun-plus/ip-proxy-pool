@@ -5,10 +5,7 @@ from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
 
 from ipfeeder.db import db
-from ipfeeder.utils import ProxyIP
-
-pages = list(range(1, 5))
-random.shuffle(pages)
+from ipfeeder.utils import ProxyIP, shuffle_pages
 
 
 class JiangxianliProxy(SpiderJob):
@@ -16,7 +13,7 @@ class JiangxianliProxy(SpiderJob):
     right_now = True
     cancelled = False
 
-    urls = [f'http://ip.jiangxianli.com/?page={i}' for i in pages]
+    urls = [f'http://ip.jiangxianli.com/?page={i}' for i in shuffle_pages(1, 5)]
 
     def run(self):
         for url in self.urls:

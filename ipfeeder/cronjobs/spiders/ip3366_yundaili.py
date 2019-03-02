@@ -5,7 +5,7 @@ from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
 
 from ipfeeder.db import db
-from ipfeeder.utils import ProxyIP
+from ipfeeder.utils import ProxyIP, shuffle_pages
 
 
 class IP3366_YunProxy(SpiderJob):
@@ -14,7 +14,8 @@ class IP3366_YunProxy(SpiderJob):
     cancelled = False
 
     urls = [
-        f'http://www.ip3366.net/free/?stype=1&page={i}' for i in range(1, 8)
+        f'http://www.ip3366.net/free/?stype=1&page={i}'
+        for i in shuffle_pages(1, 5)
     ]
 
     def run(self):
