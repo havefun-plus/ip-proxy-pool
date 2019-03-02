@@ -1,4 +1,5 @@
 from random import randint
+
 import gevent
 from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
