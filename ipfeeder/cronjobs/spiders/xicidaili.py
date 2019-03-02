@@ -9,7 +9,7 @@ from ipfeeder.utils import ProxyIP
 class XiciProxy(SpiderJob):
     rule = '1h'
     right_now = True
-    cancelled = False
+    cancelled = True
 
     urls = [
         'https://www.xicidaili.com/wn/',
