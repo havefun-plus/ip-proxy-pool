@@ -14,8 +14,10 @@
 
 启动方式 ./worker.sh
 
-3. web服务[TODO]
+3. web服务
 
 通过api形式提供已通过验证的代理ip
+
+启动方式 ./web.sh
 
 

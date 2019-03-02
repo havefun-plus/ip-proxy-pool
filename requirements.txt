@@ -4,3 +4,4 @@ redis==3.0.1
 lxml==4.2.3
 gevent==1.4.0
 flask==1.0.2
+gunicorn==19.9.0
