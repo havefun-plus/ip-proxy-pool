@@ -26,11 +26,12 @@ class XiciProxy(SpiderJob):
             html = etree.HTML(response.content)
             trs = html.xpath('//table[@id="ip_list"]//tr/td')
             for tr in trs:
-                ip = tr.xpath('..//text()')[2]
-                port = tr.xpath('..//text()')[4]
-                protocol = tr.xpath('..//text()')[12]
+                tds = tr.xpath('..//text()')
+                ip = tds[2]
+                port = tds[4]
+                protocol = tds[12]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(f'got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(f'xici proxy got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
             gevent.sleep(10)
