@@ -1,4 +1,4 @@
-from random import randint
+import random
 
 import gevent
 from cronjob.apps.spider_app import SpiderJob
@@ -8,15 +8,12 @@ from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP, shuffle_pages
 
 
-class IP3366_YunProxy(SpiderJob):
-    rule = '1h'
+class JiangxianliProxy(SpiderJob):
+    rule = '20m'
     right_now = True
     cancelled = False
 
-    urls = [
-        f'http://www.ip3366.net/free/?stype=1&page={i}'
-        for i in shuffle_pages(1, 5)
-    ]
+    urls = [f'http://ip.jiangxianli.com/?page={i}' for i in shuffle_pages(1, 5)]
 
     def run(self):
         for url in self.urls:
@@ -24,17 +21,17 @@ class IP3366_YunProxy(SpiderJob):
             if not response.ok:
                 continue
             html = etree.HTML(response.content)
-            trs = html.xpath('.//div[@id="list"]//tr')
+            trs = html.xpath('.//table//tr')
             for tr in trs:
                 tds = tr.xpath('./td/text()')
-                if len(tds) < 4:
+                if len(tds) < 5:
                     continue
-                ip = tds[0]
-                port = tds[1]
-                protocol = tds[3]
+                ip = tds[1]
+                port = tds[2]
+                protocol = tds[4]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
                     self.logger.info(
-                        f'ip3366 proxy got raw proxy_ip {str(proxy_ip)}')
+                        f'Jiangxianli proxy got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
-            gevent.sleep(randint(11, 23))
+            gevent.sleep(random.randint(11, 23))

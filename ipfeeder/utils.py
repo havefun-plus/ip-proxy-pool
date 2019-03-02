@@ -1,3 +1,6 @@
+import random
+
+
 class ProxyIP:
     def __init__(self, ip='', port='', protocol='', ip_port=''):
         self.ip = ip
@@ -16,3 +19,9 @@ class ProxyIP:
 
     def __str__(self):
         return f'{self.protocol}://{self.ip}:{self.port}'
+
+
+def shuffle_pages(start, end):
+    pages = list(range(start, end))
+    random.shuffle(pages)
+    return pages
