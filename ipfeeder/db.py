@@ -1,5 +1,3 @@
-from functools import partial
-
 from cronjob.settings import settings
 from redis import StrictRedis
 
@@ -50,6 +48,20 @@ class DB:
 
     def https_iter(self):
         yield from self._iter(VALIDATED_HTTPS)
+
+    def _get_all_http(self):
+        result = self.conn.smembers(VALIDATED_HTTP)
+        return list(map(lambda x: x.decode(), result))
+
+    def _get_all_https(self):
+        result =  self.conn.smembers(VALIDATED_HTTPS)
+        return list(map(lambda x: x.decode(), result))
+
+    def to_dict(self):
+        return dict(
+            http=self._get_all_http(),
+            https=self._get_all_https(),
+        )
 
 
 db = DB.from_settings()

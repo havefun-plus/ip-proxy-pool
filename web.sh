@@ -3,5 +3,4 @@
 export CRONJOB_SETTINGS=ipfeeder.settings
 export PYTHONPATH=.
 
-exec cronjob run --mode distributed --node worker
-
+exec gunicorn -c gunicorn.conf.py ipfeeder.web.views:app
