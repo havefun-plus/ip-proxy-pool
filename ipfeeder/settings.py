@@ -1,3 +1,4 @@
+import os
 from logging.config import dictConfig
 
 # ----- general settings -----
@@ -11,7 +12,7 @@ CRONJOBS_MODULE = 'ipfeeder.cronjobs'
 JOB_QUEUE_NAME = 'default'
 
 REDIS_SETTINGS = dict(
-    host='0.0.0.0',
+    host=os.getenv('REDIS_HOSTNAME', '0.0.0.0'),
     port=6379,
     db=0,
     password=None,
