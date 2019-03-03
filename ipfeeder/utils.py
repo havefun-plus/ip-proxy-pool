@@ -1,19 +1,50 @@
 import random
+import socket
+from typing import TypeVar
 
 
 class ProxyIP:
-    def __init__(self, ip='', port='', protocol='', ip_port=''):
+    def __init__(self,
+                 ip: str = '',
+                 port: TypeVar('Port', str, int) = '',
+                 protocol: str = '',
+                 ip_port: str = ''):
         self.ip = ip
         self.port = port
         self.protocol = protocol and protocol.lower()
         if ip_port:
-            self.ip, self.port = ip_port.split(':')
+            try:
+                self.ip, self.port = ip_port.split(':')
+            except ValueError:
+                pass
 
     @property
-    def ok(self)->bool:
+    def ok(self) -> bool:
+        try:
+            if all([
+                    self._validate_ip(),
+                    self._validate_port(),
+                    self._validate_protocol()
+            ]):
+                return True
+            return False
+        except Exception:
+            return False
+
+    def _validate_protocol(self) -> bool:
         if not self.protocol or self.protocol not in ['http', 'https']:
             return False
-        if not self.ip or not self.port:
+        return True
+
+    def _validate_ip(self) -> bool:
+        try:
+            socket.inet_aton(self.ip)
+            return True
+        except socket.error:
+            return False
+
+    def _validate_port(self) -> bool:
+        if not self.port or not 0 <= int(self.port) <= 65535:
             return False
         return True
 
@@ -21,7 +52,7 @@ class ProxyIP:
         return f'{self.protocol}://{self.ip}:{self.port}'
 
 
-def shuffle_pages(start: int, end: int)->list:
+def shuffle_pages(start: int, end: int) -> list:
     pages = list(range(start, end))
     random.shuffle(pages)
     return pages

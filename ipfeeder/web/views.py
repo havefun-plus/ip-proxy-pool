@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+
 from ipfeeder.db import db
 
 app = Flask('__name__')
