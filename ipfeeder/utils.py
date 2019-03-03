@@ -10,7 +10,7 @@ class ProxyIP:
             self.ip, self.port = ip_port.split(':')
 
     @property
-    def ok(self):
+    def ok(self)->bool:
         if not self.protocol or self.protocol not in ['http', 'https']:
             return False
         if not self.ip or not self.port:
@@ -21,7 +21,13 @@ class ProxyIP:
         return f'{self.protocol}://{self.ip}:{self.port}'
 
 
-def shuffle_pages(start, end):
+def shuffle_pages(start: int, end: int)->list:
     pages = list(range(start, end))
     random.shuffle(pages)
     return pages
+
+
+def decode_port(raw: str) -> int:
+    flag = 'ABCDEFGHIZ'
+    parsed = ''.join([str(flag.index(x)) for x in raw])
+    return int(parsed) >> 3

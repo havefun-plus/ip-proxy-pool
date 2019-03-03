@@ -1,4 +1,5 @@
 import traceback
+
 import gevent
 from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
@@ -10,7 +11,7 @@ from ipfeeder.utils import ProxyIP, decode_port
 class Data5uProxy(SpiderJob):
     rule = '1h'
     right_now = True
-    cancelled = True
+    cancelled = False
 
     urls = [
         'http://www.data5u.com/',

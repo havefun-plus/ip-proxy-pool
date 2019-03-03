@@ -1,4 +1,5 @@
 import traceback
+
 import gevent
 from cronjob.apps.spider_app import SpiderJob
 from lxml import etree
