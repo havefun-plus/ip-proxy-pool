@@ -9,7 +9,7 @@ from ipfeeder.utils import ProxyIP, decode_port
 
 
 class Data5uProxy(SpiderJob):
-    rule = '1h'
+    rule = '6h'
     right_now = True
     cancelled = False
 
@@ -23,6 +23,7 @@ class Data5uProxy(SpiderJob):
         for url in self.urls:
             response = self.http.get(url)
             if not response.ok:
+                self.logger.error(f'request failed {response.status_code}')
                 continue
             html = etree.HTML(response.content)
             trs = html.xpath('.//ul[@class="l2"]')
