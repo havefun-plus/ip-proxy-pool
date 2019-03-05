@@ -22,6 +22,7 @@ class XiciProxy(SpiderJob):
         for url in self.urls:
             response = self.http.get(url)
             if not response.ok:
+                self.logger.error(f'request failed {response.status_code}')
                 continue
             html = etree.HTML(response.content)
             trs = html.xpath('//table[@id="ip_list"]//tr/td')
