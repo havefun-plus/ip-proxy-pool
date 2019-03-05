@@ -3,3 +3,14 @@
 __pycache__
 .dockerignore
 Dockerfile
+.DS_Store
+.idea
+.vscode
+.git
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.js.map
+testresult.xml
+cobertura.xml
