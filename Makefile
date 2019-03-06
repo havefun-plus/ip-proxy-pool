@@ -10,7 +10,7 @@ clean:
 
 docker-run:
 	docker build -t="havefun-plus/ip-proxy-pool:v1" .
-	docker-compose up
+	docker-compose up -d
 
 test:
 	PYTHONPATH=. pytest -s -vvvv --cov sspider --cov tests --cov-report term-missing --cov-report xml:cobertura.xml --junitxml=testresult.xml .
