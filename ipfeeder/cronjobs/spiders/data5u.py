@@ -9,7 +9,7 @@ from ipfeeder.utils import ProxyIP, decode_port
 
 
 class Data5uProxy(SpiderJob):
-    rule = '6h'
+    rule = [3600, 5400]
     right_now = True
     cancelled = False
 
