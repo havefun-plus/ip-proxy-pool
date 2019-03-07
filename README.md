@@ -18,7 +18,7 @@
 
 #### 1.2.2 爬虫
 
-现在本项目主要有下面几种爬虫：
+现在本项目都在`ipfeeder/cronjobs/spiders`下，目前有下面几种爬虫：
 
 1. [无忧代理](http://www.data5u.com/)
 2. [全网代理](http://www.goubanjia.com/)
@@ -33,6 +33,11 @@
 1. `RawValidator`，验证新爬到的ip，如果验证通过的话分别放进`http set`和`https set`，现在`每5分钟`会调度起一个新的`RawValidator`
 2. `HttpValidator`， 每过一段时间发起一个新的`HttpValidator`去重复验证已经通过验证在`http set`中的数据，未通过验证会被丢弃
 3. `HttpsValidator`，同上
+
+验证规则:
+
+通过需要验证的代理ip访问，`httpbin.org/ip`，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip
+
 
 #### 1.2.4 启动
 
@@ -56,6 +61,6 @@ make docker-run
 
 ### 2.2 没有docker
 
-1. 修改配置文件，特别是配置redis
+1. 修改配置文件`ipfeeder/settings.py`，特别是配置redis
 2. 创建pyhton虚拟环境，安装依赖
 3. 分别执行`./worker.sh`， `./master.sh`， `./web.sh`
