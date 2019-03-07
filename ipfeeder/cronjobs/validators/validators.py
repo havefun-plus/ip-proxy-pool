@@ -50,7 +50,7 @@ def _run(validator):
         if not ip:
             continue
         if validate(ip):
-            LOGGER.info(f'pass validator: {ip}')
+            validator.logger.info(f'pass validator: {ip}')
             db.add_validated(ip)
 
 
@@ -64,7 +64,7 @@ class RawValidator(BaseJob):
 
     def run(self):
         gevent.sleep(30)
-        LOGGER.info('raw checker starting....')
+        self.logger.info('raw checker starting....')
         _run(self)
 
 
