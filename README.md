@@ -36,7 +36,7 @@
 
 验证规则:
 
-通过需要验证的代理ip访问，`httpbin.org/ip`，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip
+通过需要验证的代理ip访问，`httpbin.org/ip`，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip。
 
 
 #### 1.2.4 启动
@@ -46,6 +46,8 @@
 ### 1.3 web服务
 
 通过api形式提供已通过验证的代理ip。
+
+URL: `localhost:5000`
 
 * 启动方式 ./web.sh
 

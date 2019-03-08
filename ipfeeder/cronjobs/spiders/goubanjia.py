@@ -9,8 +9,8 @@ from ipfeeder.utils import ProxyIP, decode_port
 
 
 class GoubanjiaProxy(SpiderJob):
-    rule = '1h'
-    right_now = True
+    rule = '1h'  # 每一个小时执行一次
+    right_now = True  # 程序启动之后立马执行
     cancelled = False
 
     urls = ['http://www.goubanjia.com/']
@@ -42,7 +42,8 @@ class GoubanjiaProxy(SpiderJob):
                     proxy_ip = ProxyIP(ip, port, protocol)
                     if proxy_ip.ok:
                         self.logger.info(
-                            f'goubanjia proxy got raw proxy_ip {str(proxy_ip)}')
+                            f'goubanjia proxy got raw proxy_ip {str(proxy_ip)}'
+                        )
                         db.add_raw(str(proxy_ip))
                 except Exception:
                     self.logger.error(f'error in goubanjia {url}')

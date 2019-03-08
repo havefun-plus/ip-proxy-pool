@@ -9,8 +9,8 @@ from ipfeeder.utils import ProxyIP
 
 
 class IphaiProxy(SpiderJob):
-    rule = '1h'
-    right_now = True
+    rule = '15,45 * * * *'  #  每小时的第十五和第四十五分钟执行一次
+    right_now = False  # 程序启动时候不立即执行
     cancelled = False
 
     urls = [
