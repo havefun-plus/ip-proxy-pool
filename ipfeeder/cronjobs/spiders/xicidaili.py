@@ -33,6 +33,7 @@ class XiciProxy(SpiderJob):
                 protocol = tds[12]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(f'xici proxy got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(
+                        f'xici proxy got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
             gevent.sleep(10)

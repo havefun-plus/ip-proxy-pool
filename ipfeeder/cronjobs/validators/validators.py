@@ -55,17 +55,14 @@ def _run(validator):
 
 
 class RawValidator(BaseJob):
-    rule = '5m'
+    rule = '2m'
     right_now = True
 
     @property
     def get_value_func(self):
         return getattr(db, 'raw_pop_iter')
 
-    def run(self):
-        gevent.sleep(30)
-        self.logger.info('raw checker starting....')
-        _run(self)
+    run = _run
 
 
 class HttpValidator(BaseJob):

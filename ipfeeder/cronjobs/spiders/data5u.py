@@ -9,8 +9,8 @@ from ipfeeder.utils import ProxyIP, decode_port
 
 
 class Data5uProxy(SpiderJob):
-    rule = [3600, 5400]
-    right_now = True
+    rule = [3600, 5400]  # 一个小时到一个半小时之间随机执行一次
+    right_now = True  # 程序启动之后立马执行
     cancelled = False
 
     urls = [
