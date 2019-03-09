@@ -64,7 +64,8 @@ class DB:
     def _get_n_record(self, ip_type: str, n: Optional[int] = None) -> list:
         result = self.conn.smembers(ip_type)
         all_result = list(map(lambda x: x.decode(), result))
-        return random.choices(all_result, k=n) if n else all_result
+        return random.sample(
+            all_result, k=n) if n and n <= len(all_result) else all_result
 
     def _get_all_http(self, n: Optional[int] = None) -> list:
         return self._get_n_record(ip_type=VALIDATED_HTTP, n=n)
