@@ -1,33 +1,33 @@
-version: '3'
+version: '2.2'
 services:
   web:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
+    mem_limit: 100m
+    mem_reservation: 70m
+    cpus: 0.2
     ports:
      - "5000:5000"
 
   master:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
     command: cronjob run --mode distributed --node master
+    mem_limit: 60m
+    mem_reservation: 40m
+    cpus: 0.2
     depends_on:
      - redis
 
   worker:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
     command: cronjob run --mode distributed --node worker
+    mem_limit: 80m
+    mem_reservation: 50m
+    cpus: 0.2
     depends_on:
      - redis
     
   redis:
     image: "redis:alpine"
+    mem_limit: 40m
+    mem_reservation: 20m
+    cpus: 0.2
