@@ -14,7 +14,7 @@
 
 #### 1.2.1 资源
 
-轮询任务队列，一旦有任务就发起一个新的协程执行任务，对验证器来说，比如`RawValidator`，当需要验证的ip太多的话，每5分钟新起一个验证器并不会耗费太多资源，同时会加快验证速度。`worker`主要会执行两种任务，即`爬虫`和`验证器`。
+轮询任务队列，一旦有任务就发起一个新的协程执行任务，对验证器来说，比如`RawValidator`，当需要验证的ip太多的话，每2分钟新起一个验证器并不会耗费太多资源，同时会加快验证速度。`worker`主要会执行两种任务，即`爬虫`和`验证器`。
 
 #### 1.2.2 爬虫
 
@@ -30,14 +30,15 @@
 
 #### 1.2.3 验证器
 
-1. `RawValidator`，验证新爬到的ip，如果验证通过的话分别放进`http set`和`https set`，现在`每5分钟`会调度起一个新的`RawValidator`
+1. `RawValidator`，验证新爬到的ip，如果验证通过的话分别放进`http set`和`https set`，现在`每2分钟`会调度起一个新的`RawValidator`，也就是至少需要两分钟才会在api接口里面获得有用的代理ip。需要注意如果时间间隔太短，比如设为`1s`，每一秒新起一个新的协程，可能会造成并发太高而出现其他问题，比如验证用的网站`httpbin.org`压力太大。
 2. `HttpValidator`， 每过一段时间发起一个新的`HttpValidator`去重复验证已经通过验证在`http set`中的数据，未通过验证会被丢弃
 3. `HttpsValidator`，同上
 
 验证规则:
 
-通过需要验证的代理ip访问，`httpbin.org/ip`，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip。
+验证时候会用需要验证的ip作为代理，访问`settings.VALIATE_HTTP_URLS`(http), `settings.VALIATE_HTTPS_URLS`(https)，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip。
 
+`settings.VALIATE_HTTP_URLS`和`settings.VALIATE_HTTP_URLS`都是[httpbin](https://github.com/postmanlabs/httpbin)部署的网站，也可以根据需要添加自定义验证规则。
 
 #### 1.2.4 启动
 
@@ -47,7 +48,7 @@
 
 通过api形式提供已通过验证的代理ip。
 
-URL: `localhost:5000`
+URL: `http://localhost:5000`
 
 * 启动方式 ./web.sh
 
