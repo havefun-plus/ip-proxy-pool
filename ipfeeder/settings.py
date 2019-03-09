@@ -42,13 +42,6 @@ RETRY_TIMES = 10
 # 是否需要更换user agent
 ENABLE_REPLACE_USER_AGENT = True
 
-# ----- 爬取代理间隔------
-PROXY_SPIDERS_INTERVAL = '3m'
-
-# -----ip验证间隔-------
-NEW_IP_VALIDATORS_INTERVAL = '1m'
-OLD_IP_VALIDATORS_INTERVAL = '5m'
-
 
 # ---- urls for validate https -----
 VALIATE_HTTPS_URLS = ['https://httpbin.org/ip', 'https://eu.httpbin.org/ip']

@@ -1,9 +1,9 @@
 import gevent
-from cronjob.apps.spider_app import SpiderJob
-from lxml import etree
 
+from cronjob.apps.spider_app import SpiderJob
 from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP
+from lxml import etree
 
 
 class KuaiProxy(SpiderJob):
@@ -16,7 +16,7 @@ class KuaiProxy(SpiderJob):
         'https://www.kuaidaili.com/free/intr/'
     ]
 
-    def run(self):
+    def run(self) -> None:
         for url in self.urls:
             response = self.http.get(url)
             if not response.ok:
@@ -33,7 +33,6 @@ class KuaiProxy(SpiderJob):
                 protocol = tds[3]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(
-                        f'kuai daili got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(f'got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
             gevent.sleep(10)

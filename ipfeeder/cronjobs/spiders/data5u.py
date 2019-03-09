@@ -1,11 +1,11 @@
 import traceback
 
 import gevent
-from cronjob.apps.spider_app import SpiderJob
-from lxml import etree
 
+from cronjob.apps.spider_app import SpiderJob
 from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP, decode_port
+from lxml import etree
 
 
 class Data5uProxy(SpiderJob):
@@ -19,7 +19,7 @@ class Data5uProxy(SpiderJob):
         'http://www.data5u.com/free/gnpt/index.shtml',
     ]
 
-    def run(self):
+    def run(self) -> None:
         for url in self.urls:
             response = self.http.get(url)
             if not response.ok:
@@ -38,10 +38,9 @@ class Data5uProxy(SpiderJob):
                     port = decode_port(raw_port)
                     proxy_ip = ProxyIP(ip, port, protocol)
                     if proxy_ip.ok:
-                        self.logger.info(
-                            f'data5u proxy got raw proxy_ip {str(proxy_ip)}')
+                        self.logger.info(f'got raw proxy_ip {str(proxy_ip)}')
                         db.add_raw(str(proxy_ip))
                 except Exception:
-                    self.logger.error(f'error in data5u {url}')
+                    self.logger.error(f'error occurred when crawl {url}')
                     traceback.print_exc()
             gevent.sleep(10)
