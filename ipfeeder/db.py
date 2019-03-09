@@ -1,4 +1,4 @@
-from typing import Generator
+from typing import Generator, Optional
 
 from redis import StrictRedis
 
@@ -61,19 +61,32 @@ class DB:
     def https_pop_iter(self):
         yield from self._iter(VALIDATED_HTTPS)
 
-    def _get_all_http(self) -> list:
-        result = self.conn.smembers(VALIDATED_HTTP)
-        return list(map(lambda x: x.decode(), result))
+    def _get_n_record(self, ip_type: str, n: Optional[int] = None) -> list:
+        result = self.conn.smembers(ip_type)
+        all_result = list(map(lambda x: x.decode(), result))
+        return all_result[:n] if n else all_result
 
-    def _get_all_https(self) -> list:
-        result = self.conn.smembers(VALIDATED_HTTPS)
-        return list(map(lambda x: x.decode(), result))
+    def _get_all_http(self, n: Optional[int] = None) -> list:
+        return self._get_n_record(ip_type=VALIDATED_HTTP, n=n)
 
-    def to_dict(self) -> dict:
-        return dict(
-            http=self._get_all_http(),
-            https=self._get_all_https(),
-        )
+    def _get_all_https(self, n: Optional[int] = None) -> list:
+        return self._get_n_record(ip_type=VALIDATED_HTTPS, n=n)
+
+    def to_dict(self, n: Optional[int] = None,
+                protocol: Optional[str] = None) -> dict:
+        result = {}
+        if protocol == 'http':
+            result.update({'http': self._get_all_http(n)})
+        elif protocol == 'https':
+            result.update({'https': self._get_all_https(n)})
+        elif not protocol:
+            result.update({
+                'http': self._get_all_http(n),
+                'https': self._get_all_https(n)
+            })
+        else:
+            pass
+        return result
 
 
 db = DB.from_settings()
