@@ -38,7 +38,7 @@
 
 验证时候会用需要验证的ip作为代理，访问`settings.VALIATE_HTTP_URLS`(http), `settings.VALIATE_HTTPS_URLS`(https)，获取`X-Forwarded-For (XFF)`，如果`XFF`的第一个ip和代理ip相同，即认为通过验证，需要注意的是，这个规则下只验证了匿名ip。
 
-`settings.VALIATE_HTTP_URLS`和`settings.VALIATE_HTTP_URLS`都是[httpbin](https://github.com/postmanlabs/httpbin)部署的网站，也可以根据需要添加自定义验证规则。
+现在配置文件里面的`settings.VALIATE_HTTP_URLS`和`settings.VALIATE_HTTPS_URLS`指定的都是[httpbin](https://github.com/postmanlabs/httpbin)部署的网站，也可以根据需要添加自定义验证规则。
 
 #### 1.2.4 启动
 
