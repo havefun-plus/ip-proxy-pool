@@ -1,53 +1,33 @@
-version: '3'
+version: '2.2'
 services:
   web:
     image: "havefun-plus/ip-proxy-pool:v1"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.2'
-          memory: 100M
-        reservations:
-          cpus: '0.1'
-          memory: 70M
+    mem_limit: 100m
+    mem_reservation: 70m
+    cpus: 0.2
     ports:
      - "5000:5000"
 
   master:
     image: "havefun-plus/ip-proxy-pool:v1"
     command: cronjob run --mode distributed --node master
-    deploy:
-      resources:
-        limits:
-          cpus: '0.2'
-          memory: 60M
-        reservations:
-          cpus: '0.1'
-          memory: 40M
+    mem_limit: 60m
+    mem_reservation: 40m
+    cpus: 0.2
     depends_on:
      - redis
 
   worker:
     image: "havefun-plus/ip-proxy-pool:v1"
     command: cronjob run --mode distributed --node worker
-    deploy:
-      resources:
-        limits:
-          cpus: '0.2'
-          memory: 80M
-        reservations:
-          cpus: '0.1'
-          memory: 50M
+    mem_limit: 80m
+    mem_reservation: 50m
+    cpus: 0.2
     depends_on:
      - redis
     
   redis:
     image: "redis:alpine"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.4'
-          memory: 40M
-        reservations:
-          cpus: '0.2'
-          memory: 20M
+    mem_limit: 40m
+    mem_reservation: 20m
+    cpus: 0.2
