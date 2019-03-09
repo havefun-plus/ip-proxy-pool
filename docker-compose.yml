@@ -2,10 +2,6 @@ version: '3'
 services:
   web:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
     deploy:
       resources:
         limits:
@@ -19,10 +15,6 @@ services:
 
   master:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
     command: cronjob run --mode distributed --node master
     deploy:
       resources:
@@ -37,10 +29,6 @@ services:
 
   worker:
     image: "havefun-plus/ip-proxy-pool:v1"
-    environment:
-     - REDIS_HOSTNAME=redis
-     - CRONJOB_SETTINGS=ipfeeder.settings
-     - PYTHONPATH=.
     command: cronjob run --mode distributed --node worker
     deploy:
       resources:
