@@ -1,11 +1,11 @@
 import traceback
 
 import gevent
-
 from cronjob.apps.spider_app import SpiderJob
+from lxml import etree
+
 from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP, decode_port
-from lxml import etree
 
 
 class GoubanjiaProxy(SpiderJob):

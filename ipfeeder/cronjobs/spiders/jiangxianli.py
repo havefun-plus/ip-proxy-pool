@@ -1,11 +1,11 @@
 import random
 
 import gevent
-
 from cronjob.apps.spider_app import SpiderJob
+from lxml import etree
+
 from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP, shuffle_pages
-from lxml import etree
 
 
 class JiangxianliProxy(SpiderJob):

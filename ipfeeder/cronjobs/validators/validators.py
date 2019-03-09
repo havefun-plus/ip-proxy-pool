@@ -4,10 +4,10 @@ from urllib.parse import urlparse
 
 import gevent
 import requests
-from gevent import hub
-
 from cronjob.apps import BaseJob
 from cronjob.settings import settings
+from gevent import hub
+
 from ipfeeder.db import db
 
 hub.Hub.NOT_ERROR = (Exception, )
