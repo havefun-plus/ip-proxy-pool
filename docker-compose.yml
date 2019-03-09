@@ -6,6 +6,14 @@ services:
      - REDIS_HOSTNAME=redis
      - CRONJOB_SETTINGS=ipfeeder.settings
      - PYTHONPATH=.
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 100M
+        reservations:
+          cpus: '0.1'
+          memory: 70M
     ports:
      - "5000:5000"
 
@@ -16,6 +24,14 @@ services:
      - CRONJOB_SETTINGS=ipfeeder.settings
      - PYTHONPATH=.
     command: cronjob run --mode distributed --node master
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 60M
+        reservations:
+          cpus: '0.1'
+          memory: 40M
     depends_on:
      - redis
 
@@ -26,8 +42,24 @@ services:
      - CRONJOB_SETTINGS=ipfeeder.settings
      - PYTHONPATH=.
     command: cronjob run --mode distributed --node worker
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 80M
+        reservations:
+          cpus: '0.1'
+          memory: 50M
     depends_on:
      - redis
     
   redis:
     image: "redis:alpine"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.4'
+          memory: 40M
+        reservations:
+          cpus: '0.2'
+          memory: 20M
