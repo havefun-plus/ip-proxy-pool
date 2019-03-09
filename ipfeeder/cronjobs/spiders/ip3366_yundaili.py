@@ -1,11 +1,11 @@
 from random import randint
 
 import gevent
-from cronjob.apps.spider_app import SpiderJob
-from lxml import etree
 
+from cronjob.apps.spider_app import SpiderJob
 from ipfeeder.db import db
 from ipfeeder.utils import ProxyIP, shuffle_pages
+from lxml import etree
 
 
 class IP3366_YunProxy(SpiderJob):
@@ -18,7 +18,7 @@ class IP3366_YunProxy(SpiderJob):
         for i in shuffle_pages(1, 5)
     ]
 
-    def run(self):
+    def run(self) -> None:
         for url in self.urls:
             response = self.http.get(url)
             if not response.ok:
@@ -35,7 +35,6 @@ class IP3366_YunProxy(SpiderJob):
                 protocol = tds[3]
                 proxy_ip = ProxyIP(ip, port, protocol)
                 if proxy_ip.ok:
-                    self.logger.info(
-                        f'ip3366 proxy got raw proxy_ip {str(proxy_ip)}')
+                    self.logger.info(f'got raw proxy_ip {str(proxy_ip)}')
                     db.add_raw(str(proxy_ip))
             gevent.sleep(randint(11, 23))

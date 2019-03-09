@@ -1,12 +1,13 @@
 import logging
+from typing import Callable
 from urllib.parse import urlparse
 
 import gevent
 import requests
-from cronjob.apps import BaseJob
-from cronjob.settings import settings
 from gevent import hub
 
+from cronjob.apps import BaseJob
+from cronjob.settings import settings
 from ipfeeder.db import db
 
 hub.Hub.NOT_ERROR = (Exception, )
@@ -14,7 +15,7 @@ hub.Hub.NOT_ERROR = (Exception, )
 LOGGER = logging.getLogger(__name__)
 
 
-def _validate(validate_urls, proxy_url, protocol) -> bool:
+def _validate(validate_urls: list, proxy_url: str, protocol: str) -> bool:
     threads = [
         gevent.spawn(
             requests.get,
@@ -33,7 +34,7 @@ def _validate(validate_urls, proxy_url, protocol) -> bool:
     return False
 
 
-def validate(url) -> bool:
+def validate(url: str) -> bool:
     try:
         if url.startswith('https'):
             return _validate(settings.VALIATE_HTTPS_URLS, url, 'https')
@@ -45,11 +46,9 @@ def validate(url) -> bool:
         return False
 
 
-def _run(validator):
+def _run(validator: 'Validator') -> None:
     for ip in validator.get_value_func():
-        if not ip:
-            continue
-        if validate(ip):
+        if ip and validate(ip):
             validator.logger.info(f'pass validator: {ip}')
             db.add_validated(ip)
 
@@ -59,7 +58,7 @@ class RawValidator(BaseJob):
     right_now = True
 
     @property
-    def get_value_func(self):
+    def get_value_func(self) -> Callable:
         return getattr(db, 'raw_pop_iter')
 
     run = _run
@@ -70,7 +69,7 @@ class HttpValidator(BaseJob):
     right_now = False
 
     @property
-    def get_value_func(self):
+    def get_value_func(self) -> Callable:
         return getattr(db, 'http_pop_iter')
 
     run = _run
@@ -81,7 +80,7 @@ class HttpsValidator(BaseJob):
     right_now = False
 
     @property
-    def get_value_func(self):
+    def get_value_func(self) -> Callable:
         return getattr(db, 'https_pop_iter')
 
     run = _run

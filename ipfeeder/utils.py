@@ -8,7 +8,7 @@ class ProxyIP:
                  ip: str = '',
                  port: TypeVar('Port', str, int) = '',
                  protocol: str = '',
-                 ip_port: str = ''):
+                 ip_port: str = '') -> None:
         self.ip = ip
         self.port = port
         self.protocol = protocol and protocol.lower()
@@ -48,7 +48,7 @@ class ProxyIP:
             return False
         return True
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f'{self.protocol}://{self.ip}:{self.port}'
 
 
