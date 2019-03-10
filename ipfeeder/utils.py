@@ -21,20 +21,16 @@ class ProxyIP:
     @property
     def ok(self) -> bool:
         try:
-            if all([
-                    self._validate_ip(),
-                    self._validate_port(),
-                    self._validate_protocol()
-            ]):
-                return True
-            return False
+            return all([
+                self._validate_ip(),
+                self._validate_port(),
+                self._validate_protocol()
+            ])
         except Exception:
             return False
 
     def _validate_protocol(self) -> bool:
-        if not self.protocol or self.protocol not in ['http', 'https']:
-            return False
-        return True
+        return self.protocol and self.protocol in ['http', 'https']
 
     def _validate_ip(self) -> bool:
         try:
@@ -44,9 +40,7 @@ class ProxyIP:
             return False
 
     def _validate_port(self) -> bool:
-        if not self.port or not 0 <= int(self.port) <= 65535:
-            return False
-        return True
+        return self.port and 0 <= int(self.port) <= 65535
 
     def __str__(self) -> str:
         return f'{self.protocol}://{self.ip}:{self.port}'

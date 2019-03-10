@@ -1,7 +1,5 @@
-isort:
-	isort -rc .    
-
 lint:
+	isort -rc .    
 	flake8 --format=pylint --count --exit-zero ipfeeder tests
 
 clean:
