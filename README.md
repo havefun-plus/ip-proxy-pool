@@ -48,7 +48,7 @@
 
 通过api形式提供已通过验证的代理ip。
 
-* URL: `http://localhost:5000`/proxies?n=10&protocol=http
+* URL: `http://localhost:5000`/proxies?limit=10&protocol=http
 * URL: `http://localhost:5000`/proxies?protocol=https
 * URL: `http://localhost:5000`/proxies
 

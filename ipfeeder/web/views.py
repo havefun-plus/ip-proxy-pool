@@ -9,11 +9,11 @@ app = Flask('__name__')
 
 def validate(kwargs: dict) -> Tuple[bool, str]:
     try:
-        n = kwargs.get('n')
-        if n:
-            int(n)
+        limit = kwargs.get('limit')
+        if limit:
+            int(limit)
     except ValueError:
-        return False, 'The type of n must be int.'
+        return False, 'The type of limit must be int.'
     protocol = kwargs.get('protocol')
     if protocol and protocol not in ['http', 'https']:
         return False, 'The protocol must be http or https.'
@@ -24,9 +24,9 @@ def validate(kwargs: dict) -> Tuple[bool, str]:
 def proxies():
     args = request.args.to_dict()
     validated, msg = validate(args)
-    n = args.get('n')
+    limit = args.get('limit')
     data = db.to_dict(
-        n=int(n) if n else None,
+        n=int(limit) if limit else None,
         protocol=args.get('protocol'),
     ) if validated else {}
     return jsonify(dict(msg=msg, data=data)), 200 if validated else 400
