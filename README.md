@@ -67,5 +67,5 @@ make docker-run
 ### 2.2 没有docker
 
 1. 修改配置文件`ipfeeder/settings.py`，特别是配置redis
-2. 创建pyhton虚拟环境，安装依赖
+2. 创建pyhton虚拟环境，安装依赖`pip3.6 install -r deploy/requirements/prod.txt`
 3. 分别执行`./worker.sh`， `./master.sh`， `./web.sh`
