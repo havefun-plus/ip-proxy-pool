@@ -10,5 +10,5 @@ WORKDIR /usr/src/app
 COPY . .
 RUN pip install -i http://mirrors.aliyun.com/pypi/simple \ 
     --trusted-host mirrors.aliyun.com \
-    --no-cache-dir -r deploy/prod.txt
+    --no-cache-dir -r deploy/requirements/prod.txt
 CMD ["gunicorn", "-c", "gunicorn.conf.py", "ipfeeder.web.views:app"]
