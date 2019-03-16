@@ -1,4 +1,4 @@
-FROM python:3.6
+FROM fucangyu/centos7:v1
 MAINTAINER fcy "cangyufu@gmail.com"
 
 ENV REFRESHED_AT 2019-03-10-01
@@ -8,5 +8,5 @@ ENV PYTHONPATH=.
 
 WORKDIR /usr/src/app
 COPY . .
-RUN pip install --no-cache-dir -r deploy/requirements/prod.txt
+RUN pip3.6 install --no-cache-dir -r deploy/requirements/prod.txt
 CMD ["gunicorn", "-c", "deploy/gunicorn.conf.py", "ipfeeder.web.views:app"]
