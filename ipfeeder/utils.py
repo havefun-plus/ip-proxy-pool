@@ -1,12 +1,12 @@
 import random
 import socket
-from typing import TypeVar
+from typing import Union
 
 
 class ProxyIP:
     def __init__(self,
                  ip: str = '',
-                 port: TypeVar('Port', str, int) = '',
+                 port: Union[str, int] = '',
                  protocol: str = '',
                  ip_port: str = '') -> None:
         self.ip = ip
@@ -30,7 +30,7 @@ class ProxyIP:
             return False
 
     def _validate_protocol(self) -> bool:
-        return self.protocol and self.protocol in ['http', 'https']
+        return bool(self.protocol) and self.protocol in ['http', 'https']
 
     def _validate_ip(self) -> bool:
         try:
@@ -40,7 +40,7 @@ class ProxyIP:
             return False
 
     def _validate_port(self) -> bool:
-        return self.port and 0 <= int(self.port) <= 65535
+        return bool(self.port) and 0 <= int(self.port) <= 65535
 
     def __str__(self) -> str:
         return f'{self.protocol}://{self.ip}:{self.port}'
