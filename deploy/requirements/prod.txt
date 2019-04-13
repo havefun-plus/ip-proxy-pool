@@ -1,5 +1,5 @@
 requests[security]==2.21.0
-cronjob==0.0.17
+cronjob==0.0.20
 redis==3.0.1
 lxml==4.2.3
 gevent==1.4.0

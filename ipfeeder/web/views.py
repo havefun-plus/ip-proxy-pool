@@ -1,7 +1,6 @@
 from typing import Tuple
 
 from flask import Flask, jsonify, request
-
 from ipfeeder.db import db
 
 app = Flask('__name__')

@@ -1,5 +1,5 @@
 import logging
-from typing import Callable
+from typing import Callable, Generator
 from urllib.parse import urlparse
 
 import gevent
@@ -46,7 +46,7 @@ def validate(url: str) -> bool:
         return False
 
 
-def _run(validator: 'Validator') -> None:
+def _run(validator: BaseJob):
     for ip in validator.get_value_func():
         if ip and validate(ip):
             validator.logger.info(f'pass validator: {ip}')
@@ -58,7 +58,7 @@ class RawValidator(BaseJob):
     right_now = True
 
     @property
-    def get_value_func(self) -> Callable:
+    def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'raw_pop_iter')
 
     run = _run
@@ -69,7 +69,7 @@ class HttpValidator(BaseJob):
     right_now = False
 
     @property
-    def get_value_func(self) -> Callable:
+    def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'http_pop_iter')
 
     run = _run
@@ -80,7 +80,7 @@ class HttpsValidator(BaseJob):
     right_now = False
 
     @property
-    def get_value_func(self) -> Callable:
+    def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'https_pop_iter')
 
     run = _run
