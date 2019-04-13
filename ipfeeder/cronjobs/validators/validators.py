@@ -46,23 +46,14 @@ def validate(url: str) -> bool:
         return False
 
 
-class BaseValidator(BaseJob):
-    rule = ''
-
-    cancelled = True
-
-    @property
-    def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
-        raise NotImplementedError
-
-    def run(self):
-        for ip in self.get_value_func():
-            if ip and validate(ip):
-                self.logger.info(f'pass validator: {ip}')
-                db.add_validated(ip)
+def _run(validator: BaseJob):
+    for ip in validator.get_value_func():
+        if ip and validate(ip):
+            validator.logger.info(f'pass validator: {ip}')
+            db.add_validated(ip)
 
 
-class RawValidator(BaseValidator):
+class RawValidator(BaseJob):
     rule = '2m'
     right_now = True
 
@@ -70,14 +61,18 @@ class RawValidator(BaseValidator):
     def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'raw_pop_iter')
 
+    run = _run
 
-class HttpValidator(BaseValidator):
+
+class HttpValidator(BaseJob):
     rule = '20m'
     right_now = False
 
     @property
     def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'http_pop_iter')
+
+    run = _run
 
 
 class HttpsValidator(BaseJob):
@@ -87,3 +82,5 @@ class HttpsValidator(BaseJob):
     @property
     def get_value_func(self) -> Callable[[], Generator[str, None, None]]:
         return getattr(db, 'https_pop_iter')
+
+    run = _run
